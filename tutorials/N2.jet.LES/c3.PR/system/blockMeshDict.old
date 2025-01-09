@@ -1,0 +1,232 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001;  //mm
+//convertToMeters 1;  //m
+
+// length of chamber
+x1 80;
+
+// Radius
+r1  1.1;   //radius of fuel nozzle
+r2  10.1;  //outer radius of annulus
+r3  30;    //radius of chamber
+
+// calculation for y and z
+nr1    #calc "-1*$r1";  //negative r1
+nr2    #calc "-1*$r2";  //negative r2
+nr3    #calc "-1*$r3";  //negative r3
+
+// calculation for arc
+c11     #calc "$r1*cos(45.0)";  
+s11     #calc "$r1*sin(45.0)"; 
+c12     #calc "$r1*cos(135.0)"; 
+s12     #calc "$r1*sin(135.0)";
+c13     #calc "$r1*cos(225.0)";
+s13     #calc "$r1*sin(225.0)";
+c14     #calc "$r1*cos(315.0)";
+s14     #calc "$r1*sin(315.0)";
+
+c21     #calc "$r2*cos(45.0)";  
+s21     #calc "$r2*sin(45.0)"; 
+c22     #calc "$r2*cos(135.0)"; 
+s22     #calc "$r2*sin(135.0)";
+c23     #calc "$r2*cos(225.0)";
+s23     #calc "$r2*sin(225.0)";
+c24     #calc "$r2*cos(315.0)";
+s24     #calc "$r2*sin(315.0)";
+
+c31     #calc "$r3*cos(45.0)";  
+s31     #calc "$r3*sin(45.0)"; 
+c32     #calc "$r3*cos(135.0)"; 
+s32     #calc "$r3*sin(135.0)";
+c33     #calc "$r3*cos(225.0)";
+s33     #calc "$r3*sin(225.0)";
+c34     #calc "$r3*cos(315.0)";
+s34     #calc "$r3*sin(315.0)";
+
+
+vertices
+(
+  (0     0     0)      //0
+  ($x1   0     0)      //1
+
+  (0     $r1   0)      //2
+  (0     0     $r1)    //3
+  (0     $nr1  0)      //4
+  (0     0     $nr1)   //5
+
+  ($x1   $r1   0)      //6
+  ($x1   0     $r1)    //7
+  ($x1   $nr1  0)      //8
+  ($x1   0     $nr1)   //9
+
+  (0     $r2   0)      //10
+  (0     0     $r2)    //11
+  (0     $nr2  0)      //12
+  (0     0     $nr2)   //13
+
+  ($x1   $r2   0)      //14
+  ($x1   0     $r2)    //15
+  ($x1   $nr2  0)      //16
+  ($x1   0     $nr2)   //17
+
+  (0     $r3   0)      //18
+  (0     0     $r3)    //19
+  (0     $nr3  0)      //20
+  (0     0     $nr3)   //21
+
+  ($x1   $r3   0)      //22
+  ($x1   0     $r3)    //23
+  ($x1   $nr3  0)      //24
+  ($x1   0     $nr3)   //25
+
+);
+
+blocks
+(
+    // First quater
+    hex (0   2   3   0   1   6   7   1 )     (12  30 550)     simpleGrading (1   1  4) //block1
+    hex (2   10  11  3   6   14  15  7 )     (45  30 550)     simpleGrading (3   1  4) //block2
+    hex (10  18  19  11  14  22  23  15)     (20  30 550)     simpleGrading (3   1  4) //block3
+
+    // Second quater
+    hex (0   3   4   0   1   7   8   1 )     (12  30 550)     simpleGrading (1   1  4) //block1
+    hex (3   11  12  4   7   15  16  8 )     (45  30 550)     simpleGrading (3   1  4) //block2
+    hex (11  19  20  12  15  23  24  16)     (20  30 550)     simpleGrading (3   1  4) //block3
+
+    // Third quater
+    hex (0   4   5   0   1   8   9   1 )     (12  30 550)     simpleGrading (1   1  4) //block1
+    hex (4   12  13  5   8   16  17  9 )     (45  30 550)     simpleGrading (3   1  4) //block2
+    hex (12  20  21  13  16  24  25  17)     (20  30 550)     simpleGrading (3   1  4) //block3
+
+    // Fourth quater  
+    hex (0   5   2   0   1   9   6   1 )     (12  30 550)     simpleGrading (1   1  4) //block1
+    hex (5   13  10  2   9   17  14  6 )     (45  30 550)     simpleGrading (3   1  4) //block2
+    hex (13  21  18  10  17  25  22  14)     (20  30 550)     simpleGrading (3   1  4) //block3
+
+);
+
+edges
+(
+   //first quater
+   arc 2  3  (0   $c11 $s11)
+   arc 6  7  ($x1 $c11 $s11)
+
+   arc 10 11  (0   $c21 $s21)
+   arc 14 15  ($x1 $c21 $s21)
+
+   //second quater
+   arc 3  4  (0   $c12 $s12)
+   arc 7  8  ($x1 $c12 $s12)
+   
+   arc 11 12  (0   $c22 $s22)
+   arc 15 16  ($x1 $c22 $s22)
+
+   //third quater
+   arc 4  5  (0   $c13 $s13)
+   arc 8  9  ($x1 $c13 $s13)
+
+   arc 12 13  (0   $c23 $s23)
+   arc 16 17  ($x1 $c23 $s23)
+
+   //fourth quater
+   arc 5  2  (0   $c14 $s14)
+   arc 9  6  ($x1 $c14 $s14)
+
+   arc 13 10  (0   $c24 $s24)
+   arc 17 14  ($x1 $c24 $s24)
+
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (2  0  0  3 )
+            (3  0  0  4 )
+            (4  0  0  5 )
+            (5  0  0  2 )
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (7   1   1   6 )
+            (15  7   6   14)
+            (23  15  14  22)
+
+            (8   1   1   7 )
+            (16  8   7   15)
+            (24  16  15  23)
+
+            (9   1   1   8 )
+            (17  9   8   16)
+            (25  17  16  24)
+
+            (6   1   1   9 )
+            (14  6   9   17)
+            (22  14  17  25)
+        );
+    }
+
+    frontWall
+    {
+        type wall;
+        faces
+        (
+            (10 2  3  11)
+            (18 10 11 19)
+
+            (11 3  4  12)
+            (19 11 12 20)
+
+            (12 4  5  13)
+            (20 12 13 21)
+
+            (13 5  2  10)
+            (21 13 10 18)
+        );
+    }
+
+    outerWall    
+    {
+        type wall;
+        faces
+        (
+            (18 19 23 22)
+
+            (19 20 24 23)
+
+            (20 21 25 24)
+
+            (21 18 22 25)
+        );
+    }
+
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
