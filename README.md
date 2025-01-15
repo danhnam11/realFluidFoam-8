@@ -19,9 +19,9 @@ A low Mach number solver for simulations of turbulent flows at trancritical and 
 
 		git clone https://github.com/danhnam11/realFluidFoam-8.git
 
-- Specify the path of your _src_ directory to an environment variable, _LIB_rfFoam_SRC_. For example:
+- Specify the path of your _src_ directory to an environment variable, _LIB_rfFoam8_SRC_. For example:
 
-		echo "export LIB_rfFoam_SRC=~/OpenFOAM/yourDirectory/realFluidFoam-8/src/" >> ~/.bashrc
+		echo "export LIB_rfFoam8_SRC=~/OpenFOAM/yourDirectory/realFluidFoam-8/src/" >> ~/.bashrc
 		source ~/.bashrc
 - To compile the necessary libraries and solver, go to _realFluidFoam-8_ directory and run the _Allwmake_ script:
 
