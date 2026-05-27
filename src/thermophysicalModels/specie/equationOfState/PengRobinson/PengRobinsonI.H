@@ -31,6 +31,7 @@ License
 template<class Specie>
 inline Foam::scalar Foam::PengRobinson<Specie>::Xterm(scalar p, scalar T) const
 {
+    /*
     const scalar B = b_*p/(RR*T); 
     const scalar aAlpha = coef1_ - coef2_*sqrt(T) + coef3_*T;
     const scalar daAlpha = -coef2_/(2*sqrt(T))+coef3_;
@@ -43,12 +44,30 @@ inline Foam::scalar Foam::PengRobinson<Specie>::Xterm(scalar p, scalar T) const
            first + 
            ((T*daAlpha - aAlpha)*(Z(p,T)-0.414*B)/(2.828*B*(Z(p,T)+2.414*B)))*fprime
            );
+
+    */
+
+    const scalar B = b_*p/(RR*T); 
+    const scalar aAlpha = coef1_ - coef2_*sqrt(T) + coef3_*T;
+    const scalar daAlpha = -coef2_/(2*sqrt(T))+coef3_;
+    //const scalar daAlpha2 = coef2_/(4*T*sqrt(T));
+    const scalar dB = -b_*p/(RR*T*T);
+
+    const scalar F = (Z(p,T) +2.424*B)/(Z(p,T)- 0.414*B);
+    const scalar Fprime = 2.828*( Z(p,T)*dB - B*dZdT(p,T) )
+                          /pow((Z(p,T)-0.414*B), 2.0);
+
+    const scalar first = (coef3_ - coef2_/(4*sqrt(T)) - daAlpha)*log(F)/(2.828*b_); 
+    const scalar second = (coef3_*T - coef2_*sqrt(T)/2 - aAlpha)*Fprime/(2.828*b_*F);
+
+    return (first + second);
 }
 
 
 template<class Specie>
 inline Foam::scalar Foam::PengRobinson<Specie>::dZdT(scalar p, scalar T) const
 {
+    /*
     // copy from SRK, have not checked yet
     const scalar aAlpha = coef1_ - coef2_*sqrt(T) + coef3_*T;
     const scalar A = aAlpha*p/sqr(RR*T);
@@ -56,6 +75,18 @@ inline Foam::scalar Foam::PengRobinson<Specie>::dZdT(scalar p, scalar T) const
     const scalar numerator = -(A+Z(p,T)+2*B*Z(p,T))*b_*p/(RR*T*T)+
                               ((B-Z(p,T))*(coef3_*T-coef1_)/(2*T))*(p/(pow(RR*T, 2.0)));
     return (numerator/(3*pow(Z(p,T),2.0)-2*Z(p,T)+A-B-B*B));
+    */
+    const scalar aAlpha = coef1_ - coef2_*sqrt(T) + coef3_*T;
+    const scalar A = aAlpha*p/sqr(RR*T);
+    const scalar dA = p*(coef3_ - coef1_/T)/(0.5*RR*T*RR*T);
+    const scalar B = b_*p/(RR*T); 
+    const scalar dB = -b_*p/(RR*T*T);
+
+    const scalar numerator = (B-Z(p,T))*dA 
+                   - dB*( pow( Z(p,T), 2.0) - Z(p,T) -6*B*Z(p,T) -A -2*B -3*B*B);
+
+    return (numerator/(3*pow(Z(p,T),2.0)-2*Z(p,T)*(1-B) + A - 2*B - 3*B*B));    
+
 }
 
 
