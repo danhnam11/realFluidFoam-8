@@ -47,7 +47,7 @@ Tutorials for LES of a cryogenic nitrogen jet is available in the _tutorial_ dir
 
 ## Authors 
 This package was developed at Clean Combustion & Energy Research Lab., Dept. of Mech. Engineering, Ulsan National Institute of Science and Technology (UNIST), Korea (Prof. C.S. Yoo: https://csyoo.unist.ac.kr/). If you publish results that are obtained using this package, please cite our papers as follows:
-- D. N. Nguyen, C. S. Yoo, realFluidFoam: A low Mach number solver for simulations of turbulent flows at transcritical and supercritical conditions in OpenFOAM, Computer Physics Communications (2024)(submitted).
+- D. N. Nguyen, C. S. Yoo, realFluidFoam: A low Mach number solver for simulations of turbulent flows at transcritical and supercritical conditions in OpenFOAM, Comput. Phys. Commun. 312 (2025) 109600.
 - D. N. Nguyen, K. S. Jung, J. W. Shim, C. S. Yoo, Real-fluid thermophysicalModels library: An OpenFOAM-based library for reacting flow simulations at high pressure, Comput. Phys. Commun. 273 (2022) 108264.
 
 Contact:
