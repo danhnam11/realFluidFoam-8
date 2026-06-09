@@ -23,32 +23,41 @@ ddtSchemes
 
 gradSchemes
 {
-    default         Gauss linear;
+    //default         Gauss linear;
+    default         cellLimited Gauss linear 1;
 }
 
 divSchemes
 {
-    default         Gauss linear;
+    default             Gauss limitedLinear 1;
+    div(phi,U)          Gauss limitedLinearV 1;
+    div(phi,Yi)         Gauss limitedLinear01 1;
+    div(phi,h)          Gauss limitedLinear 1;
+    div(phi,K)          Gauss limitedLinear 1;
+    div(phid,p)         Gauss limitedLinear 1;
+    div(phi,epsilon)    Gauss limitedLinear 1;
+    div(phi,Yi_h)       Gauss limitedLinear01 1;
+    div(phi,k)          Gauss limitedLinear 1;
+    div(((rho*nuEff)*dev2(T(grad(U)))))     Gauss linear;
 
-    div(phi,U)      Gauss limitedLinearV 1;
-    div(phi,Yi_h)   Gauss limitedLinear 1;
-    div(phi,K)      Gauss limitedLinear 1;
-    div(phid,p)     Gauss limitedLinear 1;
-    div(phi,epsilon) Gauss limitedLinear 1;
-    div(phi,k) Gauss limitedLinear 1;
-    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
-
-    div(((hei_CH4*rho)*YVi_CH4)) Gauss linear;
-    div(((hei_CO2*rho)*YVi_CO2)) Gauss linear;
-    div(((hei_H2O*rho)*YVi_H2O)) Gauss linear;
-    div(((hei_N2*rho)*YVi_N2)) Gauss linear;
-    div(((hei_O2*rho)*YVi_O2)) Gauss linear;
+/*
+    div(phi,U)          Gauss upwind;
+    div(phi,Z)          Gauss upwind;
+    div(phi,varZ)       Gauss upwind;
+    div(phi,Yi)         Gauss limitedLinear01 1;
+    div(phi,K)          Gauss upwind;
+    div(phid,p)         Gauss limitedLinear 1;
+    div(phi,epsilon)    Gauss limitedLinear 1;
+    div(phi,Yi_h)       Gauss limitedLinear01 1;
+    div(phi,k)          Gauss limitedLinear 1;
+    div(((rho*nuEff)*dev2(T(grad(U)))))     Gauss linear;
+*/
 }
 
 laplacianSchemes
 {
-    //default         Gauss linear orthogonal;
     default         Gauss linear corrected;
+    //default         Gauss linear uncorrected;
 }
 
 interpolationSchemes
@@ -58,8 +67,15 @@ interpolationSchemes
 
 snGradSchemes
 {
-    //default         orthogonal;
     default         corrected;
+    //default         uncorrected;
+}
+
+
+fluxRequired
+{
+    default         no;
+    p;
 }
 
 

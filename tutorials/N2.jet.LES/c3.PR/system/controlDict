@@ -25,13 +25,13 @@ startTime       0;
 stopAt          endTime;
 //stopAt          writeNow;
 
-endTime         0.01;
+endTime         0.15;
 
 deltaT          1e-6;
 
 writeControl    adjustableRunTime;
 
-writeInterval   0.001;
+writeInterval   0.0005;
 
 purgeWrite      0;
 
@@ -47,14 +47,14 @@ timePrecision   6;
 
 runTimeModifiable true;
 
-//adjustTimeStep  yes;
-adjustTimeStep  no;
+adjustTimeStep  yes;
+//adjustTimeStep  no;
 
-maxCo           0.3;
+maxCo           0.7;
 
 functions
 {
-   #include "fieldAverage"
+   //#include "fieldAverage"
    //#include "turbulenceFields"
    //#include "resolvedTKE"
    //#include "subgridTKE"

@@ -14,143 +14,412 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-convertToMeters 0.001;  //mm
-//convertToMeters 1;  //m
+convertToMeters 0.001;  // mm
 
-// length of chamber
-x1 80;
+// main parameters of chamber
+x0 0;       // origin
+x1 80.0;    // length of total chamber
 
-// Radius
-r1  1.1;   //radius of fuel nozzle
-r2  10.1;  //outer radius of annulus
-r3  30;    //radius of chamber
+// radial control radii [mm]
+r0  0.5;
+r1  0.8;
+r2  1.1;
+r3  2;
+r4  4;
+r5  15;
+r6  30;
 
-// calculation for y and z
-nr1    #calc "-1*$r1";  //negative r1
-nr2    #calc "-1*$r2";  //negative r2
-nr3    #calc "-1*$r3";  //negative r3
+R0  0.5;
+R1  0.8;
+R2  1.1;
+R3  2;
+R4  4;
+R5  15;
+R6  30;
 
-// calculation for arc
-c11  #calc  "0.707107*$r1";  
-s11  #calc  "0.707107*$r1"; 
-c12  #calc "-0.707107*$r1"; 
-s12  #calc  "0.707107*$r1";
-c13  #calc "-0.707107*$r1";
-s13  #calc "-0.707107*$r1";
-c14  #calc  "0.707107*$r1";
-s14  #calc "-0.707107*$r1";
+// control cells in arc
+ne1Q   24;    // number of elements in one quarter
 
-c21  #calc  "0.707107*$r2";  
-s21  #calc  "0.707107*$r2"; 
-c22  #calc "-0.707107*$r2"; 
-s22  #calc  "0.707107*$r2";
-c23  #calc "-0.707107*$r2";
-s23  #calc "-0.707107*$r2";
-c24  #calc  "0.707107*$r2";
-s24  #calc "-0.707107*$r2";
+// control cells in radial direction
+neY1  5;  // r0-r1
+neY2  4;  // r1-r2
+neY3  10;  // r2-r3
+neY4  18;  // r3-r4
+neY5  40;  // r4-r5
+neY6  16;  // r5-r6
 
-c31  #calc  "0.707107*$r3";  
-s31  #calc  "0.707107*$r3"; 
-c32  #calc "-0.707107*$r3"; 
-s32  #calc  "0.707107*$r3";
-c33  #calc "-0.707107*$r3";
-s33  #calc "-0.707107*$r3";
-c34  #calc  "0.707107*$r3";
-s34  #calc "-0.707107*$r3";
+grd1  1.2;  // grading r0-r1
+grd2  1.2;  // grading r1-r2
+grd3  1.2;  // grading r2-r3
+grd4  1.2;  // grading r3-r4
+grd5  4.1;  // grading r4-r5
+grd6  3;  // grading r5-r6
 
+// control cells in axial direction
+neX1  400;
+
+// original axial multi-grading, retained to avoid additional transition changes
+dRx1 0.2;
+dRx2 0.4;
+dRx3 0.4;
+cRx1 0.38;
+cRx2 0.4;
+cRx3 0.22;
+gdx1 1.2;
+gdx2 2.5;
+gdx3 1.3;
 
 vertices
 (
-  (0     0     0)      //0
+  ($x0   0     0)      //0
   ($x1   0     0)      //1
 
-  (0     $r1   0)      //2
-  (0     0     $r1)    //3
-  (0     $nr1  0)      //4
-  (0     0     $nr1)   //5
+// ring r0
+  ($x0   $r0   0)      //2
+  ($x0   0   #calc "-1*$r0")      //3
+  ($x0   #calc "-1*$r0"   0)      //4
+  ($x0   0   $r0)      //5
+  ($x1   $R0   0)      //6
+  ($x1   0   #calc "-1*$R0")      //7
+  ($x1   #calc "-1*$R0"   0)      //8
+  ($x1   0   $R0)      //9
 
-  ($x1   $r1   0)      //6
-  ($x1   0     $r1)    //7
-  ($x1   $nr1  0)      //8
-  ($x1   0     $nr1)   //9
+// ring r1
+  ($x0   $r1   0)      //10
+  ($x0   0   #calc "-1*$r1")      //11
+  ($x0   #calc "-1*$r1"   0)      //12
+  ($x0   0   $r1)      //13
+  ($x1   $R1   0)      //14
+  ($x1   0   #calc "-1*$R1")      //15
+  ($x1   #calc "-1*$R1"   0)      //16
+  ($x1   0   $R1)      //17
 
+// ring r2
+  ($x0   $r2   0)      //18
+  ($x0   0   #calc "-1*$r2")      //19
+  ($x0   #calc "-1*$r2"   0)      //20
+  ($x0   0   $r2)      //21
+  ($x1   $R2   0)      //22
+  ($x1   0   #calc "-1*$R2")      //23
+  ($x1   #calc "-1*$R2"   0)      //24
+  ($x1   0   $R2)      //25
 
-  (0     $r2   0)      //10
-  (0     0     $r2)    //11
-  (0     $nr2  0)      //12
-  (0     0     $nr2)   //13
+// ring r3
+  ($x0   $r3   0)      //26
+  ($x0   0   #calc "-1*$r3")      //27
+  ($x0   #calc "-1*$r3"   0)      //28
+  ($x0   0   $r3)      //29
+  ($x1   $R3   0)      //30
+  ($x1   0   #calc "-1*$R3")      //31
+  ($x1   #calc "-1*$R3"   0)      //32
+  ($x1   0   $R3)      //33
 
-  ($x1   $r2   0)      //14
-  ($x1   0     $r2)    //15
-  ($x1   $nr2  0)      //16
-  ($x1   0     $nr2)   //17
+// ring r4
+  ($x0   $r4   0)      //34
+  ($x0   0   #calc "-1*$r4")      //35
+  ($x0   #calc "-1*$r4"   0)      //36
+  ($x0   0   $r4)      //37
+  ($x1   $R4   0)      //38
+  ($x1   0   #calc "-1*$R4")      //39
+  ($x1   #calc "-1*$R4"   0)      //40
+  ($x1   0   $R4)      //41
 
-  (0     $r3   0)      //18
-  (0     0     $r3)    //19
-  (0     $nr3  0)      //20
-  (0     0     $nr3)   //21
+// ring r5
+  ($x0   $r5   0)      //42
+  ($x0   0   #calc "-1*$r5")      //43
+  ($x0   #calc "-1*$r5"   0)      //44
+  ($x0   0   $r5)      //45
+  ($x1   $R5   0)      //46
+  ($x1   0   #calc "-1*$R5")      //47
+  ($x1   #calc "-1*$R5"   0)      //48
+  ($x1   0   $R5)      //49
 
-  ($x1   $r3   0)      //22
-  ($x1   0     $r3)    //23
-  ($x1   $nr3  0)      //24
-  ($x1   0     $nr3)   //25
+// ring r6
+  ($x0   $r6   0)      //50
+  ($x0   0   #calc "-1*$r6")      //51
+  ($x0   #calc "-1*$r6"   0)      //52
+  ($x0   0   $r6)      //53
+  ($x1   $R6   0)      //54
+  ($x1   0   #calc "-1*$R6")      //55
+  ($x1   #calc "-1*$R6"   0)      //56
+  ($x1   0   $R6)      //57
 
 );
 
 blocks
 (
-    // First quater
-    hex (0   2   3   0   1   6   7   1 )     (12  30 450)     simpleGrading (1   1  5) //block1
-    hex (2   10  11  3   6   14  15  7 )     (45  30 450)     simpleGrading (3   1  5) //block2
-    hex (10  18  19  11  14  22  23  15)     (20  30 450)     simpleGrading (3   1  5) //block3
+    // from 0-r0
+    hex (2   5   4   3    6   9   8   7)   ($ne1Q  $ne1Q $neX1)  simpleGrading
+    (
+        1
+        1
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
 
-    // Second quater
-    hex (0   3   4   0   1   7   8   1 )     (12  30 450)     simpleGrading (1   1  5) //block1
-    hex (3   11  12  4   7   15  16  8 )     (45  30 450)     simpleGrading (3   1  5) //block2
-    hex (11  19  20  12  15  23  24  16)     (20  30 450)     simpleGrading (3   1  5) //block3
+    // from r0-r1
+    hex (2  3  11  10   6  7  15  14)  ($ne1Q  $neY1 $neX1)  simpleGrading
+    (
+        1
+        $grd1
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
 
-    // Third quater
-    hex (0   4   5   0   1   8   9   1 )     (12  30 450)     simpleGrading (1   1  5) //block1
-    hex (4   12  13  5   8   16  17  9 )     (45  30 450)     simpleGrading (3   1  5) //block2
-    hex (12  20  21  13  16  24  25  17)     (20  30 450)     simpleGrading (3   1  5) //block3
+    hex (3  4  12  11   7  8  16  15)  ($ne1Q  $neY1 $neX1)  simpleGrading
+    (
+        1
+        $grd1
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
 
-    // Fourth quater  
-    hex (0   5   2   0   1   9   6   1 )     (12  30 450)     simpleGrading (1   1  5) //block1
-    hex (5   13  10  2   9   17  14  6 )     (45  30 450)     simpleGrading (3   1  5) //block2
-    hex (13  21  18  10  17  25  22  14)     (20  30 450)     simpleGrading (3   1  5) //block3
+    hex (4  5  13  12   8  9  17  16)  ($ne1Q  $neY1 $neX1)  simpleGrading
+    (
+        1
+        $grd1
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (5  2  10  13   9  6  14  17)  ($ne1Q  $neY1 $neX1)  simpleGrading
+    (
+        1
+        $grd1
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    // from r1-r2
+    hex (10  11  19  18   14  15  23  22)  ($ne1Q  $neY2 $neX1)  simpleGrading
+    (
+        1
+        $grd2
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (11  12  20  19   15  16  24  23)  ($ne1Q  $neY2 $neX1)  simpleGrading
+    (
+        1
+        $grd2
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (12  13  21  20   16  17  25  24)  ($ne1Q  $neY2 $neX1)  simpleGrading
+    (
+        1
+        $grd2
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (13  10  18  21   17  14  22  25)  ($ne1Q  $neY2 $neX1)  simpleGrading
+    (
+        1
+        $grd2
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    // from r2-r3
+    hex (18  19  27  26   22  23  31  30)  ($ne1Q  $neY3 $neX1)  simpleGrading
+    (
+        1
+        $grd3
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (19  20  28  27   23  24  32  31)  ($ne1Q  $neY3 $neX1)  simpleGrading
+    (
+        1
+        $grd3
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (20  21  29  28   24  25  33  32)  ($ne1Q  $neY3 $neX1)  simpleGrading
+    (
+        1
+        $grd3
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (21  18  26  29   25  22  30  33)  ($ne1Q  $neY3 $neX1)  simpleGrading
+    (
+        1
+        $grd3
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    // from r3-r4
+    hex (26  27  35  34   30  31  39  38)  ($ne1Q  $neY4 $neX1)  simpleGrading
+    (
+        1
+        $grd4
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (27  28  36  35   31  32  40  39)  ($ne1Q  $neY4 $neX1)  simpleGrading
+    (
+        1
+        $grd4
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (28  29  37  36   32  33  41  40)  ($ne1Q  $neY4 $neX1)  simpleGrading
+    (
+        1
+        $grd4
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (29  26  34  37   33  30  38  41)  ($ne1Q  $neY4 $neX1)  simpleGrading
+    (
+        1
+        $grd4
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    // from r4-r5
+    hex (34  35  43  42   38  39  47  46)  ($ne1Q  $neY5 $neX1)  simpleGrading
+    (
+        1
+        $grd5
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (35  36  44  43   39  40  48  47)  ($ne1Q  $neY5 $neX1)  simpleGrading
+    (
+        1
+        $grd5
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (36  37  45  44   40  41  49  48)  ($ne1Q  $neY5 $neX1)  simpleGrading
+    (
+        1
+        $grd5
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (37  34  42  45   41  38  46  49)  ($ne1Q  $neY5 $neX1)  simpleGrading
+    (
+        1
+        $grd5
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    // from r5-r6
+    hex (42  43  51  50   46  47  55  54)  ($ne1Q  $neY6 $neX1)  simpleGrading
+    (
+        1
+        $grd6
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (43  44  52  51   47  48  56  55)  ($ne1Q  $neY6 $neX1)  simpleGrading
+    (
+        1
+        $grd6
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (44  45  53  52   48  49  57  56)  ($ne1Q  $neY6 $neX1)  simpleGrading
+    (
+        1
+        $grd6
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
+    hex (45  42  50  53   49  46  54  57)  ($ne1Q  $neY6 $neX1)  simpleGrading
+    (
+        1
+        $grd6
+        (($dRx1 $cRx1 $gdx1)  ($dRx2 $cRx2 $gdx2)  ($dRx3 $cRx3 $gdx3))
+    )
+
 );
 
 edges
 (
-  
-   //first quater
-   arc 2  3  (0   $c11 $s11)
-   arc 6  7  ($x1 $c11 $s11)
+  // inlet
+    // plane $x0, r0, arc factor 0.6
+    arc 2  3   ($x0    0.3  -0.3)
+    arc 3  4   ($x0    -0.3  -0.3)
+    arc 4  5   ($x0    -0.3  0.3)
+    arc 5  2   ($x0    0.3  0.3)
 
-   arc 10 11  (0   $c21 $s21)
-   arc 14 15  ($x1 $c21 $s21)
+    // plane $x0, r1, arc factor 0.707107
+    arc 10  11   ($x0    0.5656856  -0.5656856)
+    arc 11  12   ($x0    -0.5656856  -0.5656856)
+    arc 12  13   ($x0    -0.5656856  0.5656856)
+    arc 13  10   ($x0    0.5656856  0.5656856)
 
-   //second quater
-   arc 3  4  (0   $c12 $s12)
-   arc 7  8  ($x1 $c12 $s12)
-   
-   arc 11 12  (0   $c22 $s22)
-   arc 15 16  ($x1 $c22 $s22)
+    // plane $x0, r2, arc factor 0.707107
+    arc 18  19   ($x0    0.7778177  -0.7778177)
+    arc 19  20   ($x0    -0.7778177  -0.7778177)
+    arc 20  21   ($x0    -0.7778177  0.7778177)
+    arc 21  18   ($x0    0.7778177  0.7778177)
 
-   //third quater
-   arc 4  5  (0   $c13 $s13)
-   arc 8  9  ($x1 $c13 $s13)
+    // plane $x0, r3, arc factor 0.707107
+    arc 26  27   ($x0    1.414214  -1.414214)
+    arc 27  28   ($x0    -1.414214  -1.414214)
+    arc 28  29   ($x0    -1.414214  1.414214)
+    arc 29  26   ($x0    1.414214  1.414214)
 
-   arc 12 13  (0   $c23 $s23)
-   arc 16 17  ($x1 $c23 $s23)
+    // plane $x0, r4, arc factor 0.707107
+    arc 34  35   ($x0    2.828428  -2.828428)
+    arc 35  36   ($x0    -2.828428  -2.828428)
+    arc 36  37   ($x0    -2.828428  2.828428)
+    arc 37  34   ($x0    2.828428  2.828428)
 
-   //fourth quater
-   arc 5  2  (0   $c14 $s14)
-   arc 9  6  ($x1 $c14 $s14)
+    // plane $x0, r5, arc factor 0.6
+    arc 42  43   ($x0    9  -9)
+    arc 43  44   ($x0    -9  -9)
+    arc 44  45   ($x0    -9  9)
+    arc 45  42   ($x0    9  9)
 
-   arc 13 10  (0   $c24 $s24)
-   arc 17 14  ($x1 $c24 $s24)
-  
+    // plane $x0, r6, arc factor 0.707107
+    arc 50  51   ($x0    21.21321  -21.21321)
+    arc 51  52   ($x0    -21.21321  -21.21321)
+    arc 52  53   ($x0    -21.21321  21.21321)
+    arc 53  50   ($x0    21.21321  21.21321)
+
+  // outlet
+    // plane $x1, r0, arc factor 0.6
+    arc 6  7   ($x1    0.3  -0.3)
+    arc 7  8   ($x1    -0.3  -0.3)
+    arc 8  9   ($x1    -0.3  0.3)
+    arc 9  6   ($x1    0.3  0.3)
+
+    // plane $x1, r1, arc factor 0.707107
+    arc 14  15   ($x1    0.5656856  -0.5656856)
+    arc 15  16   ($x1    -0.5656856  -0.5656856)
+    arc 16  17   ($x1    -0.5656856  0.5656856)
+    arc 17  14   ($x1    0.5656856  0.5656856)
+
+    // plane $x1, r2, arc factor 0.707107
+    arc 22  23   ($x1    0.7778177  -0.7778177)
+    arc 23  24   ($x1    -0.7778177  -0.7778177)
+    arc 24  25   ($x1    -0.7778177  0.7778177)
+    arc 25  22   ($x1    0.7778177  0.7778177)
+
+    // plane $x1, r3, arc factor 0.707107
+    arc 30  31   ($x1    1.414214  -1.414214)
+    arc 31  32   ($x1    -1.414214  -1.414214)
+    arc 32  33   ($x1    -1.414214  1.414214)
+    arc 33  30   ($x1    1.414214  1.414214)
+
+    // plane $x1, r4, arc factor 0.707107
+    arc 38  39   ($x1    2.828428  -2.828428)
+    arc 39  40   ($x1    -2.828428  -2.828428)
+    arc 40  41   ($x1    -2.828428  2.828428)
+    arc 41  38   ($x1    2.828428  2.828428)
+
+    // plane $x1, r5, arc factor 0.6
+    arc 46  47   ($x1    9  -9)
+    arc 47  48   ($x1    -9  -9)
+    arc 48  49   ($x1    -9  9)
+    arc 49  46   ($x1    9  9)
+
+    // plane $x1, r6, arc factor 0.707107
+    arc 54  55   ($x1    21.21321  -21.21321)
+    arc 55  56   ($x1    -21.21321  -21.21321)
+    arc 56  57   ($x1    -21.21321  21.21321)
+    arc 57  54   ($x1    21.21321  21.21321)
+
 );
 
 boundary
@@ -160,10 +429,15 @@ boundary
         type patch;
         faces
         (
-            (2  0  0  3 )
-            (3  0  0  4 )
-            (4  0  0  5 )
-            (5  0  0  2 )
+            (2   5   4   3 )
+            (2   3   11  10)
+            (3   4   12  11)
+            (4   5   13  12)
+            (5   2   10  13)
+            (10   11   19  18)
+            (11   12   20  19)
+            (12   13   21  20)
+            (13   10   18  21)
         );
     }
 
@@ -172,55 +446,70 @@ boundary
         type patch;
         faces
         (
-            (7   1   1   6 )
-            (15  7   6   14)
-            (23  15  14  22)
-
-            (8   1   1   7 )
-            (16  8   7   15)
-            (24  16  15  23)
-
-            (9   1   1   8 )
-            (17  9   8   16)
-            (25  17  16  24)
-
-            (6   1   1   9 )
-            (14  6   9   17)
-            (22  14  17  25)
+            (7   8  9  6)
+            (6   14  15  7)
+            (7   15  16  8)
+            (8   16  17  9)
+            (9   17  14  6)
+            (14   22  23  15)
+            (15   23  24  16)
+            (16   24  25  17)
+            (17   25  22  14)
+            (22   30  31  23)
+            (23   31  32  24)
+            (24   32  33  25)
+            (25   33  30  22)
+            (30   38  39  31)
+            (31   39  40  32)
+            (32   40  41  33)
+            (33   41  38  30)
+            (38   46  47  39)
+            (39   47  48  40)
+            (40   48  49  41)
+            (41   49  46  38)
+            (46   54  55  47)
+            (47   55  56  48)
+            (48   56  57  49)
+            (49   57  54  46)
         );
     }
-
 
     frontWall
     {
         type wall;
         faces
         (
-            (10 2  3  11)
-            (18 10 11 19)
-
-            (11 3  4  12)
-            (19 11 12 20)
-
-            (12 4  5  13)
-            (20 12 13 21)
-
-            (13 5  2  10)
-            (21 13 10 18)
+            (18   19   27  26)
+            (19   20   28  27)
+            (20   21   29  28)
+            (21   18   26  29)
+            (26   27   35  34)
+            (27   28   36  35)
+            (28   29   37  36)
+            (29   26   34  37)
+            (34   35   43  42)
+            (35   36   44  43)
+            (36   37   45  44)
+            (37   34   42  45)
+            (42   43   51  50)
+            (43   44   52  51)
+            (44   45   53  52)
+            (45   42   50  53)
         );
     }
 
-    outerWall    
+    outerWall
     {
         type wall;
         faces
         (
-            (18 19 23 22)
-            (19 20 24 23)
-            (20 21 25 24)
-            (21 18 22 25)
+            (53   50   54  57)
+            (50   51   55  54)
+            (51   52   56  55)
+            (52   53   57  56)
         );
     }
+
 );
 
 mergePatchPairs
